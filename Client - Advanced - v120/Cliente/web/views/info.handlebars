@@ -1,646 +1,781 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="referrer" content="same-origin" />
-        <title>{{game_id}} - DragonBound User</title>
-        <script src="/cdn-cgi/apps/head/iR8OSjNSfwcexYD8YdkF6QmafNg.js"></script>
-        <script src="/static/js/jquery-3.5.0.min.js?2"></script>
-        <script src="/static/js/QTransform.js"></script>
-        <script src="/static/js/Filter.js?9"></script>
-        <link rel="stylesheet" href="/static/DragonBook/DragonBook.min.css?25" />
-        <script src="/static/DragonBook/DragonBook.min.js?56"></script>
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="same-origin">
+<title>{{user.game_id}} - DragonBound User</title>
+<script src="/c{{user.game_id}}-cgi/apps/head/iR8OSjNSfwcexYD8YdkF6QmafNg.js"></script><script src="/static/js/jquery-3.5.0.min.js?2"></script>
+<script src="/static/js/QTransform.js"></script>
+<script src="/static/js/Filter.js?9"></script>
+<link rel="stylesheet" href="/static/DragonBook/DragonBook.min.css?25" />
+<script src="/static/DragonBook/DragonBook.min.js?56"></script>
 
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="{{game_id}} - DragonBound User" />
-        <meta property="og:description" content="{{game_id}} DragonBound User Page. See my player info and chat with me." />
-        <meta property="og:url" content="https://dragonbound.net/user/{{game_id}}" />
-        <meta property="fb:app_id" content="823326844414352" />
-        <script async src="//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=823326844414352&version=v8.0"></script>
-        <script src="/static/DragonBook/moment.min.js"></script>
-        <script src="/static/DragonBook/Chart.min.js"></script>
-        <style>
-            #reportBtn {
-                position: absolute;
-                right: 7px;
-                bottom: 7px;
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{user.game_id}} - DragonBound User" />
+<meta property="og:description" content="{{user.game_id}} DragonBound User Page. See my player info and chat with me." />
+<meta property="og:image" content="https://i.imgur.com/0slngCm.gif" />
+<meta property="og:url" content="https://dragonbound.net/user/{{user.game_id}}" />
+<meta property="fb:app_id" content="823326844414352" />
+<script async src="//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=823326844414352&version=v8.0"></script>
+<script src="/static/DragonBook/moment.min.js"></script>
+<script src="/static/DragonBook/Chart.min.js"></script>
+<style>
+    #reportBtn {
+        position: absolute;
+        right: 7px;
+        bottom: 7px;
+    }
+    #reportMenu {
+        position: absolute;
+        right: 7px;
+        bottom: 7px;
+        padding: 7px;
+        background: #635782;
+        border-radius: 4px;
+        z-index: 9;
+    }
+    .hide {
+        display: none;
+    }
+    .PostTextArea {
+        width: 492px;
+        border: none;
+        padding: 8px;
+        height: 30px;
+        transition: all 0.4s;
+    }
+    .PostTextArea.Focus {
+        height: 80px;
+    }
+    .PostTime {
+        font-size: 10px;
+        white-space: nowrap;
+        margin-left: 10px;
+        vertical-align: bottom;
+    }
+    .DeletePost {
+        float: right;
+        margin: 10px;
+        background: url(/static/images/trash.gif);
+        width: 16px;
+        height: 16px;
+        border: none;
+        color: transparent;
+        cursor: pointer;
+    }
+    .DeleteComment {
+        float: right;
+        margin: 0 10px 10px 10px;
+        background: url(/static/images/trash.gif);
+        width: 16px;
+        height: 16px;
+        border: none;
+        color: transparent;
+        cursor: pointer;
+    }
+    .BlockPost {
+        float: right;
+        background: url(/static/images/block.png);
+        width: 32px;
+        height: 32px;
+        border: none;
+        color: transparent;
+        cursor: pointer;
+    }
+    .BlockComment {
+        float: right;
+        background: url(/static/images/block.png);
+        background-size: contain;
+        width: 16px;
+        height: 16px;
+        border: none;
+        color: transparent;
+        cursor: pointer;
+    }
+    .boxBodyPost {
+        word-wrap: break-word;
+    }
+    #PostBtn {
+        cursor: pointer;
+    }
+    .Comment {
+        position: relative;
+    }
+    .CommentT {
+        width: 91%;
+        margin: auto;
+        word-wrap: break-word;
+    }
+    .Comment:hover {
+
+    }
+    .CommentName {
+        font-weight: bold;
+    }
+    .ShowOnHover {
+        position: absolute;
+        right: 0;
+        top:0;
+    }
+    .CommentText {
+        width:90%;
+        padding: 2px;
+    }
+    .Center {
+        text-align: center;
+    }
+    .ShowOnHover {
+        display: none
+    }
+    .Comment:hover > .ShowOnHover {
+        display: block
+    }
+    #MyPlayer {
+        position: absolute;
+        top: 150px;
+        right: 160px;
+        transform: scale(1.5);
+        pointer-events: none;
+    }
+    .PostTitleEmo .emo {
+         vertical-align: baseline
+    }
+    #statsText {
+        padding: 10px;
+        font-size: 14px;
+    }
+    /*.boxTitle {*/
+        /*position: relative;*/
+    /*}*/
+    /*.PrivateIcon {*/
+        /*background: url(/static/images/private32.png);*/
+        /*width: 32px;*/
+        /*height: 32px;*/
+        /*position: absolute;*/
+        /*right: 0;*/
+        /*top: 0;*/
+    /*}*/
+    .colorchange {
+        animation: colorchange 5s forwards;
+        -webkit-animation: colorchange 5s forwards;
+    }
+    @keyframes colorchange
+    {
+      0%   {background: #0f0;}
+      25%   {background: #0f0;}
+      100% {background: white;}
+    }
+    .GMPost {font-weight: bold}
+    .GMPostTitle {background: #ffd}
+    .new {background: #ff7}
+    .goldShadow {
+        color: #ffd273;
+        text-shadow: -1px 0 2px black, 0 1px 2px black, 1px 0 2px black, 0 -1px 2px black;
+    }
+</style>
+<script>
+    var user_id = 1
+
+    function GetLanguage() {
+        if(localStorage.myLang == 'es' || localStorage.lang == '0') return 'es'
+        var l = navigator.language || navigator.userLanguage
+        if(l.indexOf('es') == 0) return 'es'
+        else return 'en'
+    }
+    var lang = GetLanguage()
+
+
+    $(function() {
+        $('#reportBtn').click(function() {
+            $('#reportMenu').show('fast')
+        })
+        $('#reportCancel').click(function() {
+            $('#reportMenu').hide('fast')
+        })
+        $('#reportPrn').click(function() {
+            $.post('/report', {t:1, u:user_id}, function(res) {
+//                alert(res)
+                $('#reportPrn').replaceWith(''+res)
+            })
+        })
+
+        // translate
+        if(lang == 'es') {
+//            console.log('Spanish')
+            $('#reportBtn').html('Reportar')
+            $('#reportPrn').html('Reportar imagen pornográfica o inapropiada')
+            $('#reportCancel').html('Cancelar')
+        }
+
+        // postTextArea
+        $('#postTextArea').focus(function() {
+            $(this).addClass('Focus')
+        }).blur(function() {
+            var div = $(this)
+            setTimeout(function() {
+                div.removeClass('Focus')
+            },100)
+
+        })
+
+        $('#FormPost').on('submit',function() {
+            return $('#postTextArea').val() != ''
+        })
+        $('.PostCommentForm').on('submit',function() {
+            return $(this).find('.CommentText').val() != ''
+        })
+
+        // disallow sending all forms after the first one was sent     TODO: show something to the user
+        // (to avoid sending the same form twice or 2 different forms if clicked fast and slow internet)
+        $('form').on('submit', function(e) {
+            if(e.isPropagationStopped()) return   // we stopped it already on other handler. ex: not valid form
+            $('form').unbind('submit').on('submit', function() {
+                return false
+            })
+        })
+
+        var s = $(atob('c2NyaXB0'))
+        for(var i=0;i<s.length;i++) {
+            var $tag = s.eq(i), tag=$tag[0]
+            if(!tag.async) $tag.remove()
+        }
+
+        var str_confirm_block = 'All posts and comments of this user will be deleted, and he will not be able to post on your page. Are you sure?'
+        $('.BlockPost,.BlockComment').click(function() {
+            return confirm(str_confirm_block)
+        })
+
+        // translate
+        if(lang=='es') {
+            str_confirm_block = 'Todas las publicaciones y comentarios de este usuario serán eliminados; y no será capaz de publicar en tu página. ¿Estás seguro?'
+            $('#postTextArea').attr('placeholder','¿Qué estás pensando?')
+            $('.CommentText').attr('placeholder','Escribe un comentario...')
+            $('#PostBtn').val('Publicar')
+            $('#whocanpost').text('¿Quien puede publicar?')
+            $('.textEveryone').text('Todos')
+            $('.textFriends').text('Amigos')
+            $('.textOnlyMe').text('Sólo Yo')
+        }
+
+        // GP graph
+        DrawGraph()
+
+        $('#postPermissionSelect').change(function() {
+            $('#postPermissionSelect').css('background', 'yellow').removeClass('colorchange')
+            $.post('/dragonbook/set', {postPerm:$('#postPermissionSelect').val()}, function(e) {
+//                console.info(e)
+                $('#postPermissionSelect').css('background', 'lightgreen').addClass('colorchange')
+//                setTimeout(function() {$('#postPermissionSelect').css('background', '#afa')}, 700)
+//                setTimeout(function() {$('#postPermissionSelect').css('background', '#dfd')}, 1400)
+//                setTimeout(function() {$('#postPermissionSelect').css('background', 'white')}, 2100)
+            }).error(function(e) {
+                console.error('ERROR', e)
+                $('#postPermissionSelect').css('background', 'lightred')
+            })
+        })
+    })
+
+    var TIME_SECOND = 1000,
+        TIME_MINUTE = 60*TIME_SECOND,
+        TIME_HOUR = 60*TIME_MINUTE,
+        TIME_DAY = 24*TIME_HOUR
+
+    var tzs = ''
+    var tz
+    function MsToDate(ms) {
+        var d = new Date(ms)
+        if(tz == undefined) {
+            tz = d.getTimezoneOffset()/-60
+            if(localStorage.myTZ > -13 && localStorage.myTZ < 13) tz = Number(localStorage.myTZ)
+                tzs = '('+ (tz<0? 'GMT'+tz : (tz>0? 'GMT+'+tz : 'UTC')) +')'
+        }
+        return new Date(d.getTime() + 3600000*tz)
+    }
+    function HourLabel(ms) {
+        var d = MsToDate(ms)
+        return d.getUTCHours()+':00 '+d.getUTCDate()+'/'+(d.getUTCMonth()+1)
+    }
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    function DayLabel(ms) {
+        var d = MsToDate(ms)
+        return months[d.getUTCMonth()]+' '+d.getUTCDate()
+    }
+
+    function DrawGraph() {
+        var gp_graph = JSON.parse('[]')
+        var from_hour = Number('43926')
+        var hour_now = Number('44262')
+//        console.log('from_hour:',from_hour,'hour_now:',hour_now,'gp_graph:', gp_graph)
+        if(!gp_graph || !gp_graph.length) return
+
+        $('#GPStats').removeClass('hide')
+
+        var from_hour1 = hour_now - 24*2  // hourly shows last 2 days
+
+        gp_graph.sort(function(a,b) {return a[0]-b[0]})  // sort by time
+
+        var baseDate = Date.UTC(2016,1,1)
+        var i, day, start_day = 0
+        var labels = [], labelsDaily = [], valuesHourlyWin = [], valuesHourlyLose = []
+        var valuesHourlyGP = [], valuesDailyGP = [], valuesDailyWin = [], valuesDailyLose = []
+        var numOfGames = 0, sumOfGP = 0, numOfWins = 0
+        var hours = 0
+        var days = 0
+
+        // zero all - hourly
+        for(i=from_hour1; i<=hour_now; i++) {
+            labels[i-from_hour1] = HourLabel(baseDate + i*TIME_HOUR)
+            valuesHourlyGP[i-from_hour1] = valuesHourlyWin[i-from_hour1] = valuesHourlyLose[i-from_hour1] = 0
+        }
+        // zero all - daily
+        for(i=from_hour; i<=hour_now; i++) {
+            hours++
+//            if((i-from_hour) % 24 == 0) {
+            if((i+tz+240) % 24 == 0) {
+                day = Math.floor((i+tz)/24)
+                if(!start_day) start_day = day
+                labelsDaily[day-start_day] = DayLabel(baseDate + day*TIME_DAY - tz*TIME_HOUR)
+                valuesDailyGP[day-start_day] = valuesDailyWin[day-start_day] = valuesDailyLose[day-start_day] = 0
+                days++
             }
-            #reportMenu {
-                position: absolute;
-                right: 7px;
-                bottom: 7px;
-                padding: 7px;
-                background: #635782;
-                border-radius: 4px;
-                z-index: 9;
+//            console.log('i:',i,'from_hour:', from_hour,'i-from_hour:',i-from_hour,'i+tz % 24:', (i+tz+240) % 24, 'hour_now:', hour_now)
+        }
+        // sum data (skipping zero points)
+        for(i=0; i<gp_graph.length; i++) {
+            // index
+            var hour = gp_graph[i][0]
+            day = Math.floor((hour+tz)/24)
+            // sum
+            sumOfGP += gp_graph[i][1]
+            numOfGames += gp_graph[i][2] + gp_graph[i][3]
+            numOfWins += gp_graph[i][2]
+            // hourly
+            if(valuesHourlyGP[hour-from_hour1] != undefined) {
+                valuesHourlyGP[hour-from_hour1] += gp_graph[i][1]
+                valuesHourlyWin[hour-from_hour1] += gp_graph[i][2]
+                valuesHourlyLose[hour-from_hour1] += gp_graph[i][3]
             }
-            .hide {
-                display: none;
+            // daily
+            if(valuesDailyGP[day-start_day] != undefined) {
+                valuesDailyGP[day-start_day] += gp_graph[i][1]
+                valuesDailyWin[day-start_day] += gp_graph[i][2]
+                valuesDailyLose[day-start_day] += gp_graph[i][3]
             }
-            .PostTextArea {
-                width: 492px;
-                border: none;
-                padding: 8px;
-                height: 30px;
-                transition: all 0.4s;
-            }
-            .PostTextArea.Focus {
-                height: 80px;
-            }
-            .PostTime {
-                font-size: 10px;
-                white-space: nowrap;
-                margin-left: 10px;
-                vertical-align: bottom;
-            }
-            .DeletePost {
-                float: right;
-                margin: 10px;
-                background: url(/static/images/trash.gif);
-                width: 16px;
-                height: 16px;
-                border: none;
-                color: transparent;
-                cursor: pointer;
-            }
-            .DeleteComment {
-                float: right;
-                margin: 0 10px 10px 10px;
-                background: url(/static/images/trash.gif);
-                width: 16px;
-                height: 16px;
-                border: none;
-                color: transparent;
-                cursor: pointer;
-            }
-            .BlockPost {
-                float: right;
-                background: url(/static/images/block.png);
-                width: 32px;
-                height: 32px;
-                border: none;
-                color: transparent;
-                cursor: pointer;
-            }
-            .BlockComment {
-                float: right;
-                background: url(/static/images/block.png);
-                background-size: contain;
-                width: 16px;
-                height: 16px;
-                border: none;
-                color: transparent;
-                cursor: pointer;
-            }
-            .boxBodyPost {
-                word-wrap: break-word;
-            }
-            #PostBtn {
-                cursor: pointer;
-            }
-            .Comment {
-                position: relative;
-            }
-            .CommentT {
-                width: 91%;
-                margin: auto;
-                word-wrap: break-word;
-            }
-            .Comment:hover {
-            }
-            .CommentName {
-                font-weight: bold;
-            }
-            .ShowOnHover {
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-            .CommentText {
-                width: 90%;
-                padding: 2px;
-            }
-            .Center {
-                text-align: center;
-            }
-            .ShowOnHover {
-                display: none;
-            }
-            .Comment:hover > .ShowOnHover {
-                display: block;
-            }
-            #MyPlayer {
-                position: absolute;
-                top: 150px;
-                right: 160px;
-                transform: scale(1.5);
-                pointer-events: none;
-            }
-            .PostTitleEmo .emo {
-                vertical-align: baseline;
-            }
-            #statsText {
-                padding: 10px;
-                font-size: 14px;
-            }
-            /*.boxTitle {*/
-            /*position: relative;*/
-            /*}*/
-            /*.PrivateIcon {*/
-            /*background: url(/static/images/private32.png);*/
-            /*width: 32px;*/
-            /*height: 32px;*/
-            /*position: absolute;*/
-            /*right: 0;*/
-            /*top: 0;*/
-            /*}*/
-            .colorchange {
-                animation: colorchange 5s forwards;
-                -webkit-animation: colorchange 5s forwards;
-            }
-            @keyframes colorchange {
-                0% {
-                    background: #0f0;
+        }
+
+        var avgGpPerGame = numOfGames ? Math.round(sumOfGP/numOfGames*10)/10 : 0
+        var avgGpPerHour = hours ? Math.round(sumOfGP/hours*10)/10 : 0
+        var avgGpPerDay = days ? Math.round(sumOfGP/days*10)/10 : 0
+        var winRate = numOfGames ? Math.round(numOfWins*100/numOfGames) : 50
+        $('#statsText').html(
+            'Average GP per game: <b>'+avgGpPerGame+'</b> (last '+numOfGames+' games)<br>'+
+            'Average GP per hour: <b>'+avgGpPerHour+'</b> (last '+hours+' hours)<br>'+
+            'Average GP per day: <b>'+avgGpPerDay+'</b> (last '+days+' days)<br>'+
+            'Win rate: <b>'+winRate+'%</b> (last '+days+' days)<br>'
+        )
+//        console.log('hours:', hours)
+//        console.log('days:', days)
+//        console.log('numOfGames:', numOfGames)
+//        console.log('sumOfGP:', sumOfGP)
+
+        // Daily
+        new Chart(document.getElementById('gpChart2'), {
+            type: 'line',
+            data: {
+                labels: labelsDaily,
+                datasets: [{
+                    label: 'Lose',
+                    backgroundColor: "rgba(255,0,0,0)",
+                    borderColor: "rgba(255,0,0,1)",
+                    borderWidth: 2,
+                    hoverBackgroundColor: "rgba(120,120,220,0.6)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: valuesDailyLose
+                },{
+                    label: 'Win',
+                    backgroundColor: "rgba(0,255,0,0)",
+                    borderColor: "rgba(0,255,0,1)",
+                    borderWidth: 2,
+                    hoverBackgroundColor: "rgba(120,120,220,0.6)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: valuesDailyWin
+                },{
+                    label: 'GP',
+                    backgroundColor: "rgba(255,255,0,0.2)",
+                    borderColor: "rgba(255,255,0,1)",
+                    borderWidth: 2,
+                    hoverBackgroundColor: "rgba(120,120,220,0.6)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: valuesDailyGP
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Daily ' + tzs
                 }
-                25% {
-                    background: #0f0;
-                }
-                100% {
-                    background: white;
+            }
+        })
+
+        // Hourly
+        new Chart(document.getElementById('gpChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Lose',
+                    backgroundColor: "rgba(255,0,0,0)",
+                    borderColor: "rgba(255,0,0,1)",
+                    borderWidth: 2,
+                    hoverBackgroundColor: "rgba(120,120,220,0.6)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: valuesHourlyLose
+                },{
+                    label: 'Win',
+                    backgroundColor: "rgba(0,255,0,0)",
+                    borderColor: "rgba(0,255,0,1)",
+                    borderWidth: 2,
+                    hoverBackgroundColor: "rgba(120,120,220,0.6)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: valuesHourlyWin
+                },{
+                    label: 'GP',
+                    backgroundColor: "rgba(255,255,0,0.2)",
+                    borderColor: "rgba(255,255,0,1)",
+                    borderWidth: 2,
+                    hoverBackgroundColor: "rgba(120,120,220,0.6)",
+                    hoverBorderColor: "rgba(220,220,220,1)",
+                    data: valuesHourlyGP
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Hourly ' + tzs
                 }
             }
-            .GMPost {
-                font-weight: bold;
-            }
-            .GMPostTitle {
-                background: #ffd;
-            }
-            .new {
-                background: #ff7;
-            }
-            .goldShadow {
-                color: #ffd273;
-                text-shadow: -1px 0 2px black, 0 1px 2px black, 1px 0 2px black, 0 -1px 2px black;
-            }
-        </style>
-        <script>
-                    var user_id = {{user_id}};
-
-                function GetLanguage() {
-                    if(localStorage.myLang == 'es' || localStorage.lang == '0') return 'es'
-                    var l = navigator.language || navigator.userLanguage
-                    if(l.indexOf('es') == 0) return 'es'
-                    else return 'en'
-                }
-                var lang = GetLanguage()
-
-
-                $(function() {
-                    $('#reportBtn').click(function() {
-                        $('#reportMenu').show('fast')
-                    })
-                    $('#reportCancel').click(function() {
-                        $('#reportMenu').hide('fast')
-                    })
-                    $('#reportPrn').click(function() {
-                        $.post('/report', {t:1, u:user_id}, function(res) {
-            //                alert(res)
-                            $('#reportPrn').replaceWith(''+res)
-                        })
-                    })
-
-                    // translate
-                    if(lang == 'es') {
-            //            console.log('Spanish')
-                        $('#reportBtn').html('Reportar')
-                        $('#reportPrn').html('Reportar imagen pornográfica o inapropiada')
-                        $('#reportCancel').html('Cancelar')
-                    }
-
-                    // postTextArea
-                    $('#postTextArea').focus(function() {
-                        $(this).addClass('Focus')
-                    }).blur(function() {
-                        var div = $(this)
-                        setTimeout(function() {
-                            div.removeClass('Focus')
-                        },100)
-
-                    })
-
-                    $('#FormPost').on('submit',function() {
-                        return $('#postTextArea').val() != ''
-                    })
-                    $('.PostCommentForm').on('submit',function() {
-                        return $(this).find('.CommentText').val() != ''
-                    })
-
-                    // disallow sending all forms after the first one was sent     TODO: show something to the user
-                    // (to avoid sending the same form twice or 2 different forms if clicked fast and slow internet)
-                    $('form').on('submit', function(e) {
-                        if(e.isPropagationStopped()) return   // we stopped it already on other handler. ex: not valid form
-                        $('form').unbind('submit').on('submit', function() {
-                            return false
-                        })
-                    })
-
-                    var s = $(atob('c2NyaXB0'))
-                    for(var i=0;i<s.length;i++) {
-                        var $tag = s.eq(i), tag=$tag[0]
-                        if(!tag.async) $tag.remove()
-                    }
-
-                    var str_confirm_block = 'All posts and comments of this user will be deleted, and he will not be able to post on your page. Are you sure?'
-                    $('.BlockPost,.BlockComment').click(function() {
-                        return confirm(str_confirm_block)
-                    })
-
-                    // translate
-                    if(lang=='es') {
-                        str_confirm_block = 'Todas las publicaciones y comentarios de este usuario serán eliminados; y no será capaz de publicar en tu página. ¿Estás seguro?'
-                        $('#postTextArea').attr('placeholder','¿Qué estás pensando?')
-                        $('.CommentText').attr('placeholder','Escribe un comentario...')
-                        $('#PostBtn').val('Publicar')
-                        $('#whocanpost').text('¿Quien puede publicar?')
-                        $('.textEveryone').text('Todos')
-                        $('.textFriends').text('Amigos')
-                        $('.textOnlyMe').text('Sólo Yo')
-                    }
-
-                    // GP graph
-                    DrawGraph()
-
-                    $('#postPermissionSelect').change(function() {
-                        $('#postPermissionSelect').css('background', 'yellow').removeClass('colorchange')
-                        $.post('/dragonbook/set', {postPerm:$('#postPermissionSelect').val()}, function(e) {
-            //                console.info(e)
-                            $('#postPermissionSelect').css('background', 'lightgreen').addClass('colorchange')
-            //                setTimeout(function() {$('#postPermissionSelect').css('background', '#afa')}, 700)
-            //                setTimeout(function() {$('#postPermissionSelect').css('background', '#dfd')}, 1400)
-            //                setTimeout(function() {$('#postPermissionSelect').css('background', 'white')}, 2100)
-                        }).error(function(e) {
-                            console.error('ERROR', e)
-                            $('#postPermissionSelect').css('background', 'lightred')
-                        })
-                    })
-                })
-
-                var TIME_SECOND = 1000,
-                    TIME_MINUTE = 60*TIME_SECOND,
-                    TIME_HOUR = 60*TIME_MINUTE,
-                    TIME_DAY = 24*TIME_HOUR
-
-                var tzs = ''
-                var tz
-                function MsToDate(ms) {
-                    var d = new Date(ms)
-                    if(tz == undefined) {
-                        tz = d.getTimezoneOffset()/-60
-                        if(localStorage.myTZ > -13 && localStorage.myTZ < 13) tz = Number(localStorage.myTZ)
-                            tzs = '('+ (tz<0? 'GMT'+tz : (tz>0? 'GMT+'+tz : 'UTC')) +')'
-                    }
-                    return new Date(d.getTime() + 3600000*tz)
-                }
-                function HourLabel(ms) {
-                    var d = MsToDate(ms)
-                    return d.getUTCHours()+':00 '+d.getUTCDate()+'/'+(d.getUTCMonth()+1)
-                }
-                var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-                function DayLabel(ms) {
-                    var d = MsToDate(ms)
-                    return months[d.getUTCMonth()]+' '+d.getUTCDate()
-                }
-
-                function DrawGraph() {
-                    var gp_graph = JSON.parse('[[43250,-9,1,4]]')
-                    var from_hour = Number('43029')
-                    var hour_now = Number('43365')
-            //        console.log('from_hour:',from_hour,'hour_now:',hour_now,'gp_graph:', gp_graph)
-                    if(!gp_graph || !gp_graph.length) return
-
-                    $('#GPStats').removeClass('hide')
-
-                    var from_hour1 = hour_now - 24*2  // hourly shows last 2 days
-
-                    gp_graph.sort(function(a,b) {return a[0]-b[0]})  // sort by time
-
-                    var baseDate = Date.UTC(2016,1,1)
-                    var i, day, start_day = 0
-                    var labels = [], labelsDaily = [], valuesHourlyWin = [], valuesHourlyLose = []
-                    var valuesHourlyGP = [], valuesDailyGP = [], valuesDailyWin = [], valuesDailyLose = []
-                    var numOfGames = 0, sumOfGP = 0, numOfWins = 0
-                    var hours = 0
-                    var days = 0
-
-                    // zero all - hourly
-                    for(i=from_hour1; i<=hour_now; i++) {
-                        labels[i-from_hour1] = HourLabel(baseDate + i*TIME_HOUR)
-                        valuesHourlyGP[i-from_hour1] = valuesHourlyWin[i-from_hour1] = valuesHourlyLose[i-from_hour1] = 0
-                    }
-                    // zero all - daily
-                    for(i=from_hour; i<=hour_now; i++) {
-                        hours++
-            //            if((i-from_hour) % 24 == 0) {
-                        if((i+tz+240) % 24 == 0) {
-                            day = Math.floor((i+tz)/24)
-                            if(!start_day) start_day = day
-                            labelsDaily[day-start_day] = DayLabel(baseDate + day*TIME_DAY - tz*TIME_HOUR)
-                            valuesDailyGP[day-start_day] = valuesDailyWin[day-start_day] = valuesDailyLose[day-start_day] = 0
-                            days++
-                        }
-            //            console.log('i:',i,'from_hour:', from_hour,'i-from_hour:',i-from_hour,'i+tz % 24:', (i+tz+240) % 24, 'hour_now:', hour_now)
-                    }
-                    // sum data (skipping zero points)
-                    for(i=0; i<gp_graph.length; i++) {
-                        // index
-                        var hour = gp_graph[i][0]
-                        day = Math.floor((hour+tz)/24)
-                        // sum
-                        sumOfGP += gp_graph[i][1]
-                        numOfGames += gp_graph[i][2] + gp_graph[i][3]
-                        numOfWins += gp_graph[i][2]
-                        // hourly
-                        if(valuesHourlyGP[hour-from_hour1] != undefined) {
-                            valuesHourlyGP[hour-from_hour1] += gp_graph[i][1]
-                            valuesHourlyWin[hour-from_hour1] += gp_graph[i][2]
-                            valuesHourlyLose[hour-from_hour1] += gp_graph[i][3]
-                        }
-                        // daily
-                        if(valuesDailyGP[day-start_day] != undefined) {
-                            valuesDailyGP[day-start_day] += gp_graph[i][1]
-                            valuesDailyWin[day-start_day] += gp_graph[i][2]
-                            valuesDailyLose[day-start_day] += gp_graph[i][3]
-                        }
-                    }
-
-                    var avgGpPerGame = numOfGames ? Math.round(sumOfGP/numOfGames*10)/10 : 0
-                    var avgGpPerHour = hours ? Math.round(sumOfGP/hours*10)/10 : 0
-                    var avgGpPerDay = days ? Math.round(sumOfGP/days*10)/10 : 0
-                    var winRate = numOfGames ? Math.round(numOfWins*100/numOfGames) : 50
-                    $('#statsText').html(
-                        'Average GP per game: <b>'+avgGpPerGame+'</b> (last '+numOfGames+' games)<br>'+
-                        'Average GP per hour: <b>'+avgGpPerHour+'</b> (last '+hours+' hours)<br>'+
-                        'Average GP per day: <b>'+avgGpPerDay+'</b> (last '+days+' days)<br>'+
-                        'Win rate: <b>'+winRate+'%</b> (last '+days+' days)<br>'
-                    )
-            //        console.log('hours:', hours)
-            //        console.log('days:', days)
-            //        console.log('numOfGames:', numOfGames)
-            //        console.log('sumOfGP:', sumOfGP)
-
-                    // Daily
-                    new Chart(document.getElementById('gpChart2'), {
-                        type: 'line',
-                        data: {
-                            labels: labelsDaily,
-                            datasets: [{
-                                label: 'Lose',
-                                backgroundColor: "rgba(255,0,0,0)",
-                                borderColor: "rgba(255,0,0,1)",
-                                borderWidth: 2,
-                                hoverBackgroundColor: "rgba(120,120,220,0.6)",
-                                hoverBorderColor: "rgba(220,220,220,1)",
-                                data: valuesDailyLose
-                            },{
-                                label: 'Win',
-                                backgroundColor: "rgba(0,255,0,0)",
-                                borderColor: "rgba(0,255,0,1)",
-                                borderWidth: 2,
-                                hoverBackgroundColor: "rgba(120,120,220,0.6)",
-                                hoverBorderColor: "rgba(220,220,220,1)",
-                                data: valuesDailyWin
-                            },{
-                                label: 'GP',
-                                backgroundColor: "rgba(255,255,0,0.2)",
-                                borderColor: "rgba(255,255,0,1)",
-                                borderWidth: 2,
-                                hoverBackgroundColor: "rgba(120,120,220,0.6)",
-                                hoverBorderColor: "rgba(220,220,220,1)",
-                                data: valuesDailyGP
-                            }]
-                        },
-                        options: {
-                            title: {
-                                display: true,
-                                text: 'Daily ' + tzs
-                            }
-                        }
-                    })
-
-                    // Hourly
-                    new Chart(document.getElementById('gpChart'), {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Lose',
-                                backgroundColor: "rgba(255,0,0,0)",
-                                borderColor: "rgba(255,0,0,1)",
-                                borderWidth: 2,
-                                hoverBackgroundColor: "rgba(120,120,220,0.6)",
-                                hoverBorderColor: "rgba(220,220,220,1)",
-                                data: valuesHourlyLose
-                            },{
-                                label: 'Win',
-                                backgroundColor: "rgba(0,255,0,0)",
-                                borderColor: "rgba(0,255,0,1)",
-                                borderWidth: 2,
-                                hoverBackgroundColor: "rgba(120,120,220,0.6)",
-                                hoverBorderColor: "rgba(220,220,220,1)",
-                                data: valuesHourlyWin
-                            },{
-                                label: 'GP',
-                                backgroundColor: "rgba(255,255,0,0.2)",
-                                borderColor: "rgba(255,255,0,1)",
-                                borderWidth: 2,
-                                hoverBackgroundColor: "rgba(120,120,220,0.6)",
-                                hoverBorderColor: "rgba(220,220,220,1)",
-                                data: valuesHourlyGP
-                            }]
-                        },
-                        options: {
-                            title: {
-                                display: true,
-                                text: 'Hourly ' + tzs
-                            }
-                        }
-                    })
-                }
+        })
+    }
+</script>
+<style>
+        html {
+            height: 100%;
+        }
+        body {
+            background: #3364a6 url(//i.imgur.com/4NphpEi.jpg) no-repeat center center fixed;
+            background-size: cover;
+            -webkit-text-size-adjust: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="fb-root"></div>
+<div id="titleTable" class="blackShadow">
+<div id="titleTableLeft" class="cell">
+<span id="icon"></span> <span id="titleText"><a href="/">DragonBound</a> > <a href="/user">User</a> > <a href="/user/{{user.game_id}}">{{user.game_id}}</a></span>
+</div>
+<div id="titleTableRight" class="cell right">
+<a href="/user/Tio lenguado">Tio lenguado</a> | <a href="/settings">Settings</a> | <a href="/logout?next=/user/{{user.game_id}}">Logout</a>
+</div>
+</div>
+<div id="body">
+<div id="mainBox">
+<div id="topBar">
+<div id="photoDiv" class="PhotoDiv"></div> <script>Img2Div2($('#photoDiv'), atob('aHR0cHM6Ly9pLmltZ3VyLmNvbS8wc2xuZ0NtLmdpZg=='))</script>
+<div class="pageCoverTitle">
+<span id="profileName"><a class="noUnderline" href="/user/{{user.game_id}}">{{user.game_id}}</a> <span class="span_rank rank rank26"></span></span>
+</div>
+<div id="MyPlayer"></div>
+<script>
+            PlayerAnim($('#MyPlayer'), [
+                {file: 'mg00060.png', type:'g', graphics: [[9,51,7,46],[9,46,7,41],[9,40,7,35],[9,35,7,30],[9,31,7,26],[9,27,7,22],[9,24,7,19],[9,21,7,16],[9,19,7,14],[5,16,5,11],[5,15,5,10],[23,49,23,43],[23,50,23,44],[22,50,22,44],[20,51,20,45],[18,51,18,45],[15,52,15,46],[13,52,13,46],[11,52,10,46],[10,52,9,46],[9,51,7,46],1]},{file: 'mb00632.png', type:'b', graphics: [[38,29,8,11],2,[38,30,8,12],[39,31,8,13],[38,30,8,12],[38,29,8,11],[37,30,8,12],3]},{file: 'mh00632.png', type:'h', graphics: [[44,34,6,35],[28,35,2,35],[31,36,3,35],[36,35,3,35],[38,33,3,35],[37,34,3,35],[36,34,4,35],[35,34,4,35],[36,34,4,35],[37,34,4,35],1,[48,34,8,36],3,[48,35,8,36],[49,35,9,36],2,[48,37,9,37],2]},{file: 'b203209.png', type:'1', graphics: [[177,56,0,0],2]},{file: 'af03598.png', type:'f', graphics: [[41,39,-28,55]]},
+            ])
         </script>
-        <style>
-            html {
-                height: 100%;
-            }
-            body {
-                background: #3364a6 url({{background}}) no-repeat center center fixed;
-                background-size: cover;
-                -webkit-text-size-adjust: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="fb-root"></div>
-        <div id="titleTable" class="blackShadow">
-            <div id="titleTableLeft" class="cell">
-                <span id="icon"></span> <span id="titleText"><a href="/">{{titulo}}</a> > <a href="/user">User</a> > <a href="/user/{{game_id}}">{{game_id}}</a></span>
-            </div>
-            <div id="titleTableRight" class="cell right">
-                {{#if login}}
-                <a href="/user/{{login_id}}">{{login_id}}</a> | <a href="/settings">Settings</a> |
-                <a href="/logout?next=/user/{{login_id}}">Logout</a>
-                {{else}}
-                <a href="/login?next=/user/{{game_id}}">Login</a>
-                {{/if}}
-            </div>
-        </div>
-        <div id="body">
-            <div id="mainBox">
-                <div id="topBar">
-                    <div id="photoDiv" class="PhotoDiv"></div>
-                    <script>
-                        Img2Div2($("#photoDiv"), atob("{{{user_img}}}"));
-                    </script>
-                    <div class="pageCoverTitle">
-                        <span id="profileName"><a class="noUnderline" href="/user/{{game_id}}">{{game_id}}</a> <span class="span_rank rank rank{{rank}}"></span></span>
-                    </div>
-                    <div id="MyPlayer"></div>
-                    <script>
-                        PlayerAnim($('#MyPlayer'), [{
-                            file: '{{{body_filename}}}',
-                            type: 'b',
-                            graphics: {{{body_graphics}}}
-                        }, {
-                            file: '{{{head_filename}}}',
-                            type: 'h',
-                            graphics: {{{head_graphics}}}
-                        }, {
-                            file: '{{{background_filename}}}',
-                            type: '1',
-                            graphics: {{{background_graphics}}}
-                        }, {
-                            file: '{{{eyes_filename}}}',
-                            type: 'g',
-                            graphics: {{{eyes_graphics}}}
-                        }, {
-                            file: '{{{foreground_filename}}}',
-                            type: '2',
-                            graphics: {{{foreground_graphics}}}
-                        }, {
-                            file: '{{{flag_filename}}}',
-                            type: 'f',
-                            graphics: {{{flag_graphics}}}
-                        }, ])
-                    </script>
-                    <!-- report -->
-                    {{#if login}} {{#unless adminPage}}
-                    <button id="reportBtn">Report</button>
-                    <span id="reportMenu" class="hide">
-                        <button id="reportPrn">Report porn or inappropriate photo</button><br />
-                        <br />
-                        <div style="text-align: right;"><button id="reportCancel">Cancel</button></div>
-                    </span>
-                    {{/unless}} {{/if}}
+</div>
+<div id="leftBar">
+<div class="Box">
+<div class="boxTitle">About</div>
+<div class="boxBody">
+<div class="infoLine"> <span class="infoLineField">GP</span> <span class="infoLineData">{{commatize user.gp}}</span> </div>
+<div class="infoLine"> <span class="infoLineField">Guild</span> <span class="infoLineData"><a href="/guild/GM">GM</a></span> </div>
+<div class="infoLine"> <span class="infoLineField">Gender</span> <span class="infoLineData">Male</span> </div>
+<div class="infoLine"> <span class="infoLineField">Avatars</span> <span class="infoLineData rightAlign">232</span> </div>
+<div class="infoLine"> <span class="infoLineField">Win Rate</span> <span class="infoLineData">{{rate user.win user.loss}}%</span> </div>
+<div class="infoLine"> <span class="infoLineField">Games</span> <span class="infoLineData">{{commatize user.win}} Win, {{commatize user.loss}} Lose</span></div>
+<div class="infoLine"> <span class="infoLineField">Joined DB</span> <span class="infoLineData">May 8, 2012, 8:40 p.m.</span> </div>
+</div>
+</div>
+<div class="Box hide" id="GPStats">
+<div class="boxTitle">GP Stats</div>
+<div class="boxBody" style="padding: 0;">
+<div id="statsText"></div>
+<canvas id="gpChart2" width="400" height="400"></canvas>
+<canvas id="gpChart" width="400" height="400"></canvas>
+</div>
+</div>
+<div class="Box">
+<div class="boxTitle">Reputation</div>
+<div class="boxBody">
+Views: 267278
+<br><br>
+Likes: <div class="fb-like" data-href="http://dragonbound.net/u/1" data-send="true" data-width="293" data-show-faces="true" data-colorscheme="dark"></div>
+</div>
+</div>
+<div class="Box">
+<div class="boxTitle">Friends</div>
+<div class="boxBody">
+Private
+</div>
+</div>
+</div>
+<div id="rightBar">
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="2799875">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/Freddy">Freddy</a>
+<span class="PostTime"><script>TD(1611782234)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">:B</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="2411678">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1577478703)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">Merry XMAS &amp; Happy New Year in DragonBound:<br />🎈🥳 youtu.be/xtpf3R09iKY 🎊🎉</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="2175250">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1541905994)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">(santa) Bonus +10% Cash adicional recargando sólo con {{user.game_id}} en dragonbound.net/cash<br />Código de Promoción: MASCASH10 (Válido hasta el 17/11/2018)<br />Info: ya.mba/27M (xmastree)</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="2175248">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1541905871)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">Black Friday - Lista de Descuentos: ya.mba/27E (trophy)</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="2158177">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1540319805)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">DragonBound Halloween Update 2018 !<br />Video: https://youtu.be/lXc9Ox6AzNI<br />1. Halloween Theme<br />2. GM Halloween Event in Server 10 (new rare gift reward)<br />3. New avatars in the shop<br />4. Old Halloween Avatars from previous years are available for time limited<br />5. 200% GP &amp; Gold for 24 hours at 31/10<br />6. Zombie Dragon Mobile shooting Pumpkins! (temporarily increased chance to get Zombie Dragon mobile at random)<br />7. Special Halloween Prix and Rewards at 31/10</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="2060977">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1531171985)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">🎉 Emoji ☎ Emojis 🎃 Events 🎆 Wow</div>
+</form>
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="CommentID" value="809535">
+<div class="Comment">
+<div class="CommentT ">
+<span class="DragonParse emo">(rank26)</span><span class="CommentName"><a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>] </span>
+<span class="DragonParse GMPost" data-rank="26">🎉 Emoji ☎ Emojis 🎃 Events 🎆 Wow</span>
+</div>
+<div class="ShowOnHover">
+</div>
+</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="1942668">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1522313119)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">dragonbound.cash (egg)</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="1935904">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1521875501)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">Happy Easter (bunny) (egg)</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="1916035">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank20)</span> <a class="name" href="/user/Alex">Alex</a>
+<span class="PostTime"><script>TD(1520515619)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="20">Hi :D</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="1090391">
+<div class="boxTitle  GMPostTitle">
+<span class="DragonParse PostTitleEmo">(rank26)</span> <a class="name" href="/user/{{user.game_id}}">{{user.game_id}}</a>
+<span class="PostTime"><script>TD(1483073476)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse GMPost" data-rank="26">Hello everyone and welcome to my page. :)</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="509099">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank14)</span> <a class="name" href="/user/ANGELO MAS NA">ANGELO MAS NA</a>
+<span class="PostTime"><script>TD(1463521631)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="14">firmas</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="508949">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank15)</span> <a class="name" href="/user/%23De$TrUctooR %21%21">#De$TrUctooR !!</a>
+<span class="PostTime"><script>TD(1463519527)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="15">firma mi muro :( :(</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="508714">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank21)</span> <a class="name" href="/user/Sunny ~">Sunny ~</a>
+<span class="PostTime"><script>TD(1463515948)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="21">Q SOLO PORQUE UNO USA EXEL TMB BANEAS ?</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="508303">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank0)</span> <a class="name" href="/user/romboide %21">romboide !</a>
+<span class="PostTime"><script>TD(1463509618)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="0">parastio de mrd aora te vas quedar micio por cagada</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="506963">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank15)</span> <a class="name" href="/user/Grimaldo Fox">Grimaldo Fox</a>
+<span class="PostTime"><script>TD(1463447788)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="15">firma mi muro</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="506818">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank15)</span> <a class="name" href="/user/=-NevaSk-=">=-NevaSk-=</a>
+<span class="PostTime"><script>TD(1463443938)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="15">Firma mi muro si xfavor gracia https://dragonbound.net/user/%3D-NevaSk-%3D</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="506439">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank2)</span> <a class="name" href="/user/*ililililililil">*ililililililil</a>
+<span class="PostTime"><script>TD(1463435000)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="2">firmas m muro :D</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="506260">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank17)</span> <a class="name" href="/user/Anyelo kasu ra">Anyelo kasu ra</a>
+<span class="PostTime"><script>TD(1463433195)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="17">como pudo ser gm<br />desiaria ser plis</div>
+</form>
+</div>
+<script>DragonParse()</script>
+<div class="Box">
+<form action="/post_action" method="POST">
+<input type='hidden' name='csrfmiddlewaretoken' value='QgFtLxyf3QkidaMCIUn69mLi0WKBovYTEyxRibs2qNxN1kBVh2jfLAIGDTIOeQs4' />
+<input type="hidden" name="PostID" value="505778">
+<div class="boxTitle  ">
+<span class="DragonParse PostTitleEmo">(rank13)</span> <a class="name" href="/user/SuperCreeper">SuperCreeper</a>
+<span class="PostTime"><script>TD(1463420174)</script></span>
+</div>
+<div class="boxBody boxBodyPost DragonParse " data-rank="13">firma mi muro</div>
+</form>
+</div>
+<script>DragonParse()</script>
 
-                    <!-- report -->
-                </div>
-                <div id="leftBar">
-                    <div class="Box">
-                        <div class="boxTitle">About</div>
-                        <div class="boxBody">
-                            <div class="infoLine"><span class="infoLineField">GP</span> <span class="infoLineData">{{commatize 1999}}</span></div>
-                            <div class="infoLine"><span class="infoLineField">Guild</span> <span class="infoLineData">{{{guild}}}</span></div>
-                            <div class="infoLine"><span class="infoLineField">Country</span> <span class="infoLineData">{{country}}</span></div>
-                            <div class="infoLine"><span class="infoLineField">Gender</span> <span class="infoLineData">{{gender}}</span></div>
-                            <div class="infoLine"><span class="infoLineField">Relationship</span> {{{relationship}}}</div>
-                            <div class="infoLine"><span class="infoLineField">Avatars</span> <span class="infoLineData rightAlign">{{{avatars}}}</span></div>
-                            <div class="infoLine"><span class="infoLineField">Win Rate</span> <span class="infoLineData">{{rate}} % (W:{{win}} / L:{{loss}})</span></div>
-                            <div class="infoLine"><span class="infoLineField">Joined DB</span> <span class="infoLineData">{{{birthday}}}</span></div>
-                        </div>
-                    </div>
-                    <div class="Box hide" id="GPStats">
-                        <div class="boxTitle">GP Stats</div>
-                        <div class="boxBody" style="padding: 0;">
-                            <div id="statsText"></div>
-                            <canvas id="gpChart2" width="400" height="400"></canvas>
-                            <canvas id="gpChart" width="400" height="400"></canvas>
-                        </div>
-                    </div>
-                    <div class="Box">
-                        <div class="boxTitle">Reputation</div>
-                        <div class="boxBody">
-                            Views: {{{views}}}
-                            <br />
-                            <br />
-                            Likes:
-                            <div class="fb-like" data-href="http://{{titulo}}.com/user/{{user_id}}" data-send="true" data-width="293" data-show-faces="true" data-colorscheme="dark"></div>
-                        </div>
-                    </div>
-                    <div class="Box">
-                        <div class="boxTitle">Friends</div>
-                        <div class="boxBody">
-                            {{#if login}} {{#if adminPage}}
-                            <a href="/u/10266377/friends">My Friends List</a>
-                            {{else}} Private {{/if}} {{else}} Private {{/if}}
-                        </div>
-                    </div>
-                    {{#if login}} {{#if adminPage}}
-                    <div class="Box BoxSecret">
-                        <div class="boxTitle">Login Info (Only Me)</div>
-                        <div class="boxBody">
-                            <div class="infoLine"><span class="infoLineField">UserID</span> <span class="infoLineData">{{user_id}}</span></div>
-                            <div class="infoLine"><span class="infoLineField">Email</span> <span class="infoLineData">machineoffire69@gmail.com</span></div>
-                            <div class="infoLine"><span class="infoLineField">Facebook</span> <span class="infoLineData">---</span></div>
-                            <div class="infoLine">
-                                <span class="infoLineField">Password</span> <span class="infoLineData"><a href="/accounts/password/change">Change Password</a></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="Box BoxSecret">
-                        <div class="boxTitle">My Tools (Only Me)</div>
-                        <div class="boxBody">
-                            <div><a href="/">Play DragonBound</a></div>
-                            <div><a href="/my_payments">Payments</a></div>
-                            <div><a href="/u/10266377/avatars">Avatars</a></div>
-                        </div>
-                    </div>
-                    {{/if}} {{/if}}
-                </div>
-                <div id="rightBar">
-                    {{#if login}}
-                    <div class="Box">
-                        <!-- -->
-                        {{#if adminPage}}
-                        <div id="postPermissionDiv">
-                            <span id="whocanpost">Who can post?</span><br />
-                            <select id="postPermissionSelect">
-                                <option class="textEveryone" value="e">Everyone</option>
-                                <option class="textFriends" value="f" selected>Friends</option>
-                                <option class="textOnlyMe" value="m">Only Me</option>
-                            </select>
-                        </div>
-                        {{/if}}
-
-                        <!-- -->
-                        <div class="boxTitle">{{titulo}} Wall</div>
-                        <div class="boxBody" style="padding: 0;">
-                            <form method="POST" action="/post_action" id="FormPost">
-                                <input type="hidden" name="csrfmiddlewaretoken" value="5hpTRRAp0ZYRPYIF03ybJNOA5Mjkv5gNqS6I49sbqOM4N4JD7WiQxVXbTbZXtcWz" />
-                                <input type="hidden" name="UserPage" value="{{id_page}}" />
-                                <input type="hidden" name="action" value="post" />
-                                <textarea id="postTextArea" name="text" class="PostTextArea" wrap="soft" placeholder="What's on your mind?"></textarea>
-                                <div style="text-align: right;">
-                                    <input type="submit" value="Post" id="PostBtn" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    {{/if}} {{#if pos_state}} {{{posts}}} {{/if}}
-                    <script>
-                        DragonParse();
-                    </script>
-                </div>
-                <div class="clearFloat"></div>
-            </div>
-        </div>
-    </body>
+</div>
+<div class="clearFloat"></div>
+</div>
+</div>
+</body>
 </html>
+<script>setTimeout(()=>{setTimeout=setInterval=()=>{}},9781)</script>
