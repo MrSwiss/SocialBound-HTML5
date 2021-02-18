@@ -6,7 +6,7 @@ var Logger = require('../../Controller/lib/logger');
 var ignoreCase = require('ignore-case');
 var md5 = require('md5');
 var constants = require('constants');
-
+const UserUseCase = require('../../domain/UseCase/user');
 var db = require('../../Controller/data');
 
 function Commatize(b) {
@@ -55,18 +55,22 @@ function getDateTime(date) {
     return time
 }
 
-router.get('/', function(req, res) {
-    var login = false;
-    var loguser = "";
-    if (req.session.account_id) {
-        login = true;
-        loguser = req.session.game_id;
-    }
-    res.render('search_user', {
-        login: login,
-        login_id: loguser,
-        error: ''
-    });
+router.get('/', async function(req, res) {
+    console.log(await UserUseCase.getUser())
+    res.status(200).json({
+        message: 'ga'
+    })
+    // var login = false;
+    // var loguser = "";
+    // if (req.session.account_id) {
+    //     login = true;
+    //     loguser = req.session.game_id;
+    // }
+    // res.render('search_user', {
+    //     login: login,
+    //     login_id: loguser,
+    //     error: ''
+    // });
 });
 
 router.post('/', function(req, res) {

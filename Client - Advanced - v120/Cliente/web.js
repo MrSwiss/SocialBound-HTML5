@@ -13,13 +13,15 @@ var ignoreCase = require('ignore-case');
 var Logger = require('./Controller/lib/logger');
 var DataBase = require('./Model/index');
 var session = require('express-session');
+const hbsHelpersT = require('./Tools/hbsHelpersT');
 
 var hbs = exphbs.create({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, "/web/views/layouts"),
     partialsDir: [
         '/web/views/partials/'
-    ]
+    ],
+    helpers: hbsHelpersT,
 });
 Logger.Init("./log/web.txt");
 
