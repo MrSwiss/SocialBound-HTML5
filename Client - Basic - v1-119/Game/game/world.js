@@ -3,6 +3,7 @@ var Logger = require('./lib/logger');
 var Message = require('./lib/message');
 const MAPS = require('./src/modelos/maps');
 require('setimmediate');
+var Shoot = require('./lib/shoot');
 
 // World
 module.exports = class World {
@@ -70,6 +71,7 @@ module.exports = class World {
                 time: null,
                 hole: [],
                 damages: [],
+                is_lightning: null,
                 ss: null
             });
         }
@@ -249,6 +251,8 @@ module.exports = class World {
                         });
                     }
                     if (shoot.isComplete) {
+					
+						if(shoot.thor && shoot.isComplete) this.addThor(shoot);
                         this.shoots_data[this.shoots_complete].s.push(shoot.x0);
                         this.shoots_data[this.shoots_complete].s.push(shoot.y0);
                         this.shoots_data[this.shoots_complete].s.push(shoot.ang);
@@ -260,6 +264,8 @@ module.exports = class World {
                         this.shoots_data[this.shoots_complete].img = shoot.img;
                         this.shoots_data[this.shoots_complete].s.push(shoot.img);
                         this.shoots_data[this.shoots_complete].time = shoot.time * 2;
+                        this.shoots_data[this.shoots_complete].is_lightning = shoot.is_lightning;
+                        
                         var fx = shoot.ss > 0 ? shoot.ss : 0;
                         this.shoots_data[this.shoots_complete].ss = fx;
                         this.shoots_complete++;
@@ -290,4 +296,63 @@ module.exports = class World {
         let { ground_size } = map_detail;
         return ground_size;    
     }
+    addThor(data){
+
+    	// console.log(data)
+    	var self = this;
+    	// console.log(data)
+    	// // lightning #1
+    	// // self.shoots[self.shoots_count] = new Shoot(data.box.position.x, -100, 270, 1000, 1, data.ax, data.ay, data.wind_angle, data.wind_power, data.account, false, data.time * 2);
+    	// /// lightning #2
+    	// // self.shoots[self.shoots_count] = new Shoot(data.box.position.x + 300, data.box.position.y - 300, 225, 2000, 1, data.ax, data.ay, data.wind_angle, data.wind_power, data.account, false, data.time * 2);
+    	// // self.shoots[self.shoots_count].exp = 1;
+    	// // self.shoots[self.shoots_count].img = null;
+    	// // self.shoots[self.shoots_count].is_lightning = 1;
+    	// // this.shoots_count++;
+    	// // self.shoots[self.shoots_count] = new Shoot(data.box.position.x - 300, data.box.position.y - 300, 315, 2000, 1, data.ax, data.ay, data.wind_angle, data.wind_power, data.account, false, data.time * 2);
+    	// // self.shoots[self.shoots_count].exp = 1;
+    	// // self.shoots[self.shoots_count].img = null;
+    	// // self.shoots[self.shoots_count].is_lightning = 1;
+    	// // this.shoots_count++;
+
+    	// self.shoot();
+    	self.game.room.forPlayers(function (account) {
+    		console.log(`player: x = ${account.player.x} - y = ${account.player.y}`);
+    		console.log(`Shoot: x = ${data.box.position.x} - y = ${data.box.position.y}`);
+    		let finalPositionShoot = {
+    			x: data.box.position.x,
+    			y: data.box.position.y
+    		};
+    		let positionOfUser = {
+    			x: account.player.x,
+    			y: account.player.y
+    		}
+    		let box2 = 150;
+    		if(finalPositionShoot.x >= (positionOfUser.x - box2) && finalPositionShoot.x <= (positionOfUser.x + box2) && finalPositionShoot.y <= (positionOfUser.y + box2) && finalPositionShoot.y >= (positionOfUser.y - box2)){
+    			self.lightning_ss(data, account.player);
+    		}
+    	})
+    }
+    lightning_ss(data, player){
+    	var self = this;
+    	self.shoots[self.shoots_count] = new Shoot(player.x, -100, 270, 1000, 1, data.ax, data.ay, data.wind_angle, data.wind_power, data.account, false, data.time * 2);
+    	self.shoots[self.shoots_count].exp = 1;
+    	self.shoots[self.shoots_count].img = null;
+    	self.shoots[self.shoots_count].is_lightning = 1;
+    	this.shoots_count++;
+    	self.shoot();
+    }
+ //    	addthor(data){
+	// 	var self = this;
+	// 	self.game.thor.angle = -Math.atan2((data.a.y - self.game.thor.y),(data.a.x - self.game.thor.x)) * 180 / Math.PI;
+	// 	if (self.game.thor.angle < 0)
+	// 		self.game.thor.angle += 360;
+	// 	let shootConfig = {x0:self.game.thor.x, y0:self.game.thor.y, ang:self.game.thor.angle, power:999, type:data.type, stime:data.config.stime, account:data.account, shootId:data.shootId, thorId:data.config.iD, isthor:true, damage:self.game.thor.damage/2};
+	// 	self.shoots[self.shoots_count] = new Shoot({...shootConfig,...data.config});
+	// 	self.shoots_data[self.shoots_complete].isStage = true;
+	// 	self.shoots_count++
+		// 	self.shootPushData();
+	// }
+
+
 };

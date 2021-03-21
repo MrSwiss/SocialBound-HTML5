@@ -8,7 +8,7 @@ var Vector = require('./vect');
 
 // Shoot
 module.exports = class Shoot {
-    constructor(x, y, ang, power, type, ax, ay, wind_ang, wind_power, account) {
+    constructor(x, y, ang, power, type, ax, ay, wind_ang, wind_power, account, thor = true, stime = 0) {
         var self = this;
         this.x0 = x;
         this.y0 = y;
@@ -18,9 +18,11 @@ module.exports = class Shoot {
         this.ang = ang;
         this.power = power;
         this.time = 0;
-        this.stime = 0;
+        this.stime = stime;
         this.exp = 0;
         this.img = 0;
+        this.is_lightning = 0;
+		this.thor = thor;
         this.wind_ang = wind_ang;
         this.wind_power = wind_power;
         this.chat_complete = false;

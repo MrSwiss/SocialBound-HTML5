@@ -264,7 +264,7 @@ module.exports = class Game {
             this.world.shoot();
             this.world.shoots_count = 4;
         } else {
-            this.world.shoots[0] = new Shoot(pfinal.x, pfinal.y, ang, power, type, ax, ay, this.wind_angle, this.wind_power, account);
+            this.world.shoots[0] = new Shoot(pfinal.x, pfinal.y, ang, power, type, ax, ay, this.wind_angle, this.wind_power, account, true);
             this.world.shoot();
             this.world.shoots_count = 1;
         }
